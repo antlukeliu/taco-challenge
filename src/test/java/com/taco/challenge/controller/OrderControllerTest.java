@@ -11,9 +11,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -108,7 +111,7 @@ public class OrderControllerTest {
     }
 
     @Test
-    public void passingInInvalidFoodId_ReturnStatusCode404() throws Exception {
+    public void passingInInvalidFoodId_ReturnStatusCode404AndCustomMessage() throws Exception {
         OrderTotalRequest request = new OrderTotalRequest();
         FoodItem foodItem = new FoodItem();
         foodItem.setFoodDescription("Veggie Taco");
@@ -119,7 +122,12 @@ public class OrderControllerTest {
 
         String jsonRequest = new ObjectMapper().writeValueAsString(request);
 
-        mvc.perform(post("/order/total").content(jsonRequest).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+        MvcResult result = mvc.perform(post("/order/total").content(jsonRequest)
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound()).andReturn();
+
+        Optional<FoodIdNotFoundException> exception = Optional.ofNullable((FoodIdNotFoundException) result.getResolvedException());
+        exception.ifPresent((err) -> assertEquals(err.getMessage(), "Food item submitted to calculate total has no price stored"));
+
     }
 
     private OrderTotalRequest createSimpleOrderRequest() {
