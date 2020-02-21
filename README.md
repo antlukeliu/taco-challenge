@@ -5,11 +5,11 @@
 `./mvnw spring-boot:run`
 
 
-###Swagger-UI
+### Swagger-UI
 Once SpringBoot has started you can navigate to
 `http://localhost:8080/swagger-ui.html` for the swagger documentation
 
-###Build Docker Image
+### Build Docker Image
 1. run `./mvnw clean package` to generate the jar
 
 2. `docker build -t taco-order-service .`
