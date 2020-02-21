@@ -1,5 +1,8 @@
 package com.taco.challenge.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.taco.challenge.dto.FoodItem;
+import com.taco.challenge.dto.OrderTotalRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +22,19 @@ public class OrderControllerTest {
     private MockMvc mvc;
 
     @Test
-    public void testTotalController_ReturnHttpOk() throws Exception {
-        mvc.perform(post("/order/total").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+    public void ValidRequestBody_ReturnHttpOk() throws Exception {
+
+        OrderTotalRequest request = new OrderTotalRequest();
+        request.setOrderId(1);
+
+        FoodItem foodItem = new FoodItem();
+
+
+
+        String jsonRequest = new ObjectMapper().writeValueAsString(request);
+
+
+        mvc.perform(post("/order/total").content(jsonRequest).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
+
 }
