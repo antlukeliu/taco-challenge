@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class FoodItem {
 
-    private long foodId;
+    private int foodId;
 
     private String foodDescription;
 
