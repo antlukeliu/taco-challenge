@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+  web-app:
+    image: taco-order-service:latest
+    ports:
+      - 8080:8080

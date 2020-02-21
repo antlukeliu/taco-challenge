@@ -1,6 +1,7 @@
 package com.taco.challenge.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.taco.challenge.ChallengeApplication;
 import com.taco.challenge.dto.FoodItem;
 import com.taco.challenge.dto.OrderTotalRequest;
 import com.taco.challenge.exception.FoodIdNotFoundException;
@@ -8,7 +9,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -22,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(OrderController.class)
+@ComponentScan({"com.taco.challenge"})
 public class OrderControllerTest {
 
     @Autowired

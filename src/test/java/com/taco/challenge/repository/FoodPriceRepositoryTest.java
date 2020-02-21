@@ -3,12 +3,14 @@ package com.taco.challenge.repository;
 import com.taco.challenge.model.FoodPrice;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+@SpringBootTest(classes = FoodPriceRepository.class)
 public class FoodPriceRepositoryTest {
 
     private FoodPriceRepository foodPriceRepository;

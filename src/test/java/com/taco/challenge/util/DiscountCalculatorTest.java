@@ -1,11 +1,13 @@
 package com.taco.challenge.util;
 
-import org.junit.Test;
-
+import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+
+@SpringBootTest(classes = DiscountCalculator.class)
 public class DiscountCalculatorTest {
 
     @Test

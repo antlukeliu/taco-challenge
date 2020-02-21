@@ -8,10 +8,12 @@ import com.taco.challenge.exception.FoodIdNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import static org.junit.Assert.assertEquals;
 
+@SpringBootTest(classes = CalculatorService.class)
 public class CalculatorServiceTest {
 
     @Autowired
