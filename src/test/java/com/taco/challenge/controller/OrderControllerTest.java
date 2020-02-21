@@ -39,9 +39,7 @@ public class OrderControllerTest {
     public void ValidRequestBody_ReturnHttpOk() throws Exception {
 
         OrderTotalRequest request = createSimpleOrderRequest();
-
         String jsonRequest = new ObjectMapper().writeValueAsString(request);
-
 
         mvc.perform(post("/order/total").content(jsonRequest).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
@@ -50,9 +48,7 @@ public class OrderControllerTest {
     public void OrderIdNotSet_ReturnBadRequest() throws Exception {
 
         OrderTotalRequest request = new OrderTotalRequest();
-
         String jsonRequest = new ObjectMapper().writeValueAsString(request);
-
 
         mvc.perform(post("/order/total").content(jsonRequest).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
     }
@@ -64,23 +60,14 @@ public class OrderControllerTest {
         request.setOrderId(1);
         String jsonRequest = new ObjectMapper().writeValueAsString(request);
 
-
         mvc.perform(post("/order/total").content(jsonRequest).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
     }
 
     @Test
     public void QuantityonFoodItemListEqualZero_ReturnBadRequest() throws Exception {
 
-        OrderTotalRequest request = new OrderTotalRequest();
-        FoodItem foodItem = new FoodItem();
-        foodItem.setFoodDescription("Veggie Taco");
-        foodItem.setFoodId(1);
-        foodItem.setQuantity(0);
-        request.getFoodItems().add(foodItem);
-        request.setOrderId(1);
-
+        OrderTotalRequest request = createSimpleOrderRequest(1, 0, "Veggie Taco");
         String jsonRequest = new ObjectMapper().writeValueAsString(request);
-
 
         mvc.perform(post("/order/total").content(jsonRequest).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
     }
@@ -88,29 +75,15 @@ public class OrderControllerTest {
     @Test
     public void FoodIdonFoodItemListEqualZero_ReturnBadRequest() throws Exception {
 
-        OrderTotalRequest request = new OrderTotalRequest();
-        FoodItem foodItem = new FoodItem();
-        foodItem.setFoodDescription("Veggie Taco");
-        foodItem.setFoodId(0);
-        foodItem.setQuantity(1);
-        request.getFoodItems().add(foodItem);
-        request.setOrderId(1);
-
+        OrderTotalRequest request = createSimpleOrderRequest(0, 1, "Veggie Taco");
         String jsonRequest = new ObjectMapper().writeValueAsString(request);
-
 
         mvc.perform(post("/order/total").content(jsonRequest).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
     }
 
     @Test
     public void passingInInvalidFoodId_ThrowFoodIdNotFoundException() {
-        OrderTotalRequest request = new OrderTotalRequest();
-        FoodItem foodItem = new FoodItem();
-        foodItem.setFoodDescription("Veggie Taco");
-        foodItem.setFoodId(10000);
-        foodItem.setQuantity(1);
-        request.getFoodItems().add(foodItem);
-        request.setOrderId(1);
+        OrderTotalRequest request = createSimpleOrderRequest(10000, 1, "Burrito");
 
         assertThatExceptionOfType(FoodIdNotFoundException.class).isThrownBy(() -> orderController.retrieveOrderTotal(request));
     }
@@ -146,4 +119,17 @@ public class OrderControllerTest {
 
         return request;
     }
+
+    private OrderTotalRequest createSimpleOrderRequest(int foodId, int quantity, String desc) {
+        OrderTotalRequest request = new OrderTotalRequest();
+        FoodItem foodItem = new FoodItem();
+        foodItem.setFoodDescription(desc);
+        foodItem.setFoodId(foodId);
+        foodItem.setQuantity(quantity);
+        request.getFoodItems().add(foodItem);
+        request.setOrderId(1);
+
+        return request;
+    }
 }
+
