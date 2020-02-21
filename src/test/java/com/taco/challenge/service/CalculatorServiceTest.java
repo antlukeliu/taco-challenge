@@ -12,11 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.mockito.ArgumentMatchers.anyInt;
+import java.math.BigDecimal;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class CalculatorServiceTest {
 
     @InjectMocks
@@ -27,10 +28,29 @@ public class CalculatorServiceTest {
 
     @Test
     public void requestWithAValidFoodId_ReturnsTotalGreaterThanZero() {
-        double expectedPrice = 2.50;
+        BigDecimal expectedPrice = new BigDecimal("2.50");
         FoodPrice foodPrice = FoodPrice.builder().foodId(1).foodName("Veggie Taco").foodPrice(expectedPrice).build();
-        when(foodPriceRepository.getFoodPriceById(anyInt())).thenReturn(foodPrice);
+        when(foodPriceRepository.getFoodPriceById(1)).thenReturn(foodPrice);
 
+        OrderTotalRequest request = createSimpleOrderRequest();
+
+        OrderTotalResponse response = calculatorService.calculateTotalOfOrder(request);
+        assertEquals(expectedPrice, response.getTotal());
+    }
+
+    @Test
+    public void requestWithAValidFoodId_ReturnsTotalWithTwoDecimal() {
+        BigDecimal expectedPrice = new BigDecimal("2.50");
+        FoodPrice foodPrice = FoodPrice.builder().foodId(1).foodName("Veggie Taco").foodPrice(expectedPrice).build();
+        when(foodPriceRepository.getFoodPriceById(1)).thenReturn(foodPrice);
+
+        OrderTotalRequest request = createSimpleOrderRequest();
+
+        OrderTotalResponse response = calculatorService.calculateTotalOfOrder(request);
+        assertEquals(expectedPrice.toString(), response.getTotal().toString());
+    }
+
+    private OrderTotalRequest createSimpleOrderRequest() {
         OrderTotalRequest request = new OrderTotalRequest();
         FoodItem foodItem = new FoodItem();
         foodItem.setFoodDescription("Veggie Taco");
@@ -39,7 +59,6 @@ public class CalculatorServiceTest {
         request.getFoodItems().add(foodItem);
         request.setOrderId(1);
 
-        OrderTotalResponse response = calculatorService.calculateTotalOfOrder(request);
-        assertEquals(response.getTotal(), expectedPrice, .0001);
+        return request;
     }
 }
