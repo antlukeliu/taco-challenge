@@ -33,6 +33,24 @@ public class CalculatorServiceTest {
     }
 
     @Test
+    public void requestWithThreeItems_ReturnNoDiscountedPrice() {
+        OrderTotalRequest request = createSimpleOrderRequest(2, "Chicken Taco", 3);
+
+        OrderTotalResponse response = calculatorService.calculateTotalOfOrder(request);
+
+        assertEquals(new BigDecimal("9.00"), response.getTotal());
+    }
+
+    @Test
+    public void requestWithFourItems_ReturnDiscountedPrice() {
+        OrderTotalRequest request = createSimpleOrderRequest(2, "Chicken Taco", 4);
+
+        OrderTotalResponse response = calculatorService.calculateTotalOfOrder(request);
+
+        assertEquals(new BigDecimal("9.60"), response.getTotal());
+    }
+
+    @Test
     public void requestWithAValidFoodId_ReturnsTotalWithTwoDecimal() {
         BigDecimal expectedPrice = new BigDecimal("2.50");
 
@@ -48,24 +66,6 @@ public class CalculatorServiceTest {
 
         OrderTotalResponse response = calculatorService.calculateTotalOfOrder(request);
         assertEquals(response.getOrderId(), request.getOrderId());
-    }
-
-    @Test
-    public void requestWithFourItems_ReturnDiscountedPrice() {
-        OrderTotalRequest request = createSimpleOrderRequest(2, "Chicken Taco", 4);
-
-        OrderTotalResponse response = calculatorService.calculateTotalOfOrder(request);
-
-        assertEquals(new BigDecimal("9.60"), response.getTotal());
-    }
-
-    @Test
-    public void requestWithThreeItems_ReturnNoDiscountedPrice() {
-        OrderTotalRequest request = createSimpleOrderRequest(2, "Chicken Taco", 3);
-
-        OrderTotalResponse response = calculatorService.calculateTotalOfOrder(request);
-
-        assertEquals(new BigDecimal("9.00"), response.getTotal());
     }
 
     @Test(expected = FoodIdNotFoundException.class)
