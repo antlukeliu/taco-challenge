@@ -12,6 +12,6 @@ Once SpringBoot has started you can navigate to
 ### Build Docker Image
 1. run `./mvnw clean package` to generate the jar
 
-2. `docker build -t taco-order-service .`
+2. Build docker image: `docker build -t taco-order-service .`
 
-3. `docker-compose up` -d (optional if you wanted it "detached" mode
+3. Start up docker container: `docker-compose up` -d (optional if you wanted it "detached" mode)
